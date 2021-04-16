@@ -1,49 +1,51 @@
 site_name: Black Mesa
 site_description: >-
-  Moderation for the server owner who loves configuration.
+    Moderation for the server owner who loves configuration.
 
 repo_name: blackmesadev/black-mesa
 repo_url: https://github.com/blackmesadev/black-mesa
 
+edit_uri: https://github.com/blackmesadev/docs/edit/master/docs
+
 theme:
-  name: material
-  logo: assets/monogram.svg
-  favicon: assets/monogram.png
+    name: material
+    logo: assets/monogram.svg
+    favicon: assets/monogram.png
 
-  palette:
-    scheme: slate
-    accent: orange
+    palette:
+        scheme: slate
+        accent: orange
 
-  icon:
-    repo: fontawesome/brands/github
+    icon:
+        repo: fontawesome/brands/github
 
-  features:
-    - navigation.instant
-    - navigation.tabs
+    features:
+        - navigation.instant
+        - navigation.tabs
 
 extra_css:
-  - stylesheets/extra.css
+    - stylesheets/extra.css
 
 copyright: Copyright &copy; 2021 Black Mesa Development
 
 extra:
-  social:
-    - icon: fontawesome/brands/discord
-      link: https://discord.gg/ZezqXEXBDJ
+    social:
+        - icon: fontawesome/brands/discord
+          link: https://discord.gg/ZezqXEXBDJ
 
 markdown_extensions:
-  - admonition
-  - attr_list
-  - pymdownx.details
-  - pymdownx.superfences
-  - pymdownx.highlight:
-      linenums: true
-  - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
-
+    - admonition
+    - attr_list
+    - pymdownx.details
+    - pymdownx.superfences
+    - pymdownx.highlight:
+          linenums: true
+    - pymdownx.emoji:
+          emoji_index: !!python/name:materialx.emoji.twemoji
+          emoji_generator: !!python/name:materialx.emoji.to_svg
 
 plugins:
-  - search
-  - minify:
-      minify_html: true
+    - search
+    - git-revision-date
+    - minify:
+          minify_html: true
