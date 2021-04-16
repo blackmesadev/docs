@@ -3,7 +3,10 @@
 ![](assets/banner.png)
 {: style="text-align: center;" }
 
-[:material-plus: Invite](https://discord.com/api/oauth2/authorize?client_id=815646963693256704&permissions=402972678&scope=bot){ .md-button .md-button--primary } [:material-cog-outline: Dashboard](https://dashboard.blackmesa.science/){ .md-button } [:material-help: Support](https://discord.gg/ZezqXEXBDJ){ .md-button }
+[:material-plus: Invite](https://discord.com/api/oauth2/authorize?client_id=815646963693256704&permissions=402972678&scope=bot){ .md-button .md-button--primary }
+{: style="text-align: center;" }
+
+[:material-cog-outline: Dashboard](https://dashboard.blackmesa.science/){ .md-button } [:material-help: Support](https://discord.gg/ZezqXEXBDJ){ .md-button }
 {: style="text-align: center;" }
 
 ## What is Black Mesa?
