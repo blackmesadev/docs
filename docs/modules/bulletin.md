@@ -11,5 +11,5 @@ To enable Bulletin, run `!bulletin <channel> <day>` (e.g. `!bulletin #mod-bullet
 will tell Black Mesa to post its moderation bulletin in a certain channel on a certain day.
 
 !!! tip
-Black Mesa will post the bulletin based on the UTC timezone. As such it may be offset for you
-or your staff members.
+    Black Mesa will post the bulletin based on the UTC timezone. As such it may be offset for you
+    or your staff members.
