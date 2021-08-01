@@ -1,5 +1,7 @@
 # Home
 
+<!-- prettier-ignore-start -->
+<!-- Prettier completely butchers these buttons. Don't allow it to format. -->
 ![](assets/banner.png)
 {: style="text-align: center;" }
 
@@ -8,11 +10,12 @@
 
 [:material-cog-outline: Dashboard](https://dashboard.blackmesa.bot/){ .md-button } [:material-help: Support](https://discord.gg/ZezqXEXBDJ){ .md-button }
 {: style="text-align: center;" }
+<!-- prettier-ignore-end -->
 
 ## What is Black Mesa?
 
-Black Mesa is an Aperture/<abbr title="Rowboat fork">\*boat</abbr> alternative for server owners
-who love configuration :material-cog-outline: without compromising performance
+Black Mesa is an Aperture/<abbr title="Rowboat fork">\*boat</abbr> alternative for server owners who
+love configuration :material-cog-outline: without compromising performance
 :material-airplane-takeoff:.
 
 ## Who's behind it?
@@ -20,5 +23,5 @@ who love configuration :material-cog-outline: without compromising performance
 Black Mesa was developed out of necessity by <abbr title="Tyler#0911">Tyler</abbr> and
 <abbr title="LewisTehMinerz#1337">Lewis</abbr> from the
 [Troll Discord server](https://discord.gg/troll) as Aperture was an unreliable bot at the time.
-<abbr title="Flashy#1984">Flashy</abbr> (also from Troll) joined shortly after as a web developer
-to work on the web dashboard.
+<abbr title="Flashy#1984">Flashy</abbr> (also from Troll) joined shortly after as a web developer to
+work on the web dashboard.
