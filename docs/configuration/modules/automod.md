@@ -7,11 +7,11 @@ Automod is a module that allows you to automatically moderate your server.
 | Key | Type | Description | Default Value | Optional |
 | --- | --- | --- | --- | --- |
 | `enabled` | `boolean` | Enable or disable automod. | `false` | ❌ |
-| `guild_options` | [`GuildOptions`](#guildoptions) | A list of filters to apply to messages. | `None` | ✅ |
-| `censor_levels` | HashMap<`level`, [`Censor`](#censor)> | A hashmap where the index is the permission level and the value is the Censor config | `None` | ✅ |
-| `censor_channels` | HashMap<`channel`, [`Censor`](#censor)> | A hashmap where the index is a channel ID and the value is the Censor config | `None` | ✅ |
-| `spam_levels` | HashMap<`level`, [`Spam`](#spam)> | A hashmap where the index is the permission level and the value is the Spam config | `None` | ✅ |
-| `spam_channels` | HashMap<`channel`, [`Spam`](#spam)> | A hashmap where the index is a channel ID and the value is the Spam config | `None` | ✅ |
+| `guild_options` | [`GuildOptions`](#guildoptions) | Guild automod settings. | `None` | ✅ |
+| `censor_levels` | HashMap<`level`, [`Censor`](#censor)> | A hashmap where the index is the permission level and the value is the Censor config. | `None` | ✅ |
+| `censor_channels` | HashMap<`channel`, [`Censor`](#censor)> | A hashmap where the index is a channel ID and the value is the Censor config. | `None` | ✅ |
+| `spam_levels` | HashMap<`level`, [`Spam`](#spam)> | A hashmap where the index is the permission level and the value is the Spam config. | `None` | ✅ |
+| `spam_channels` | HashMap<`channel`, [`Spam`](#spam)> | A hashmap where the index is a channel ID and the value is the Spam config. | `None` | ✅ |
 
 
 ### `GuildOptions`
