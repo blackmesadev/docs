@@ -15,7 +15,7 @@ Logging is a module that allows you to log events to a channel.
 
 
 ### `Event`
-Note, all values here are usable, they work as groups, just without nodes. So both `AuditLog` and `AutomodCensor` are valid.
+Note, all values here are usable, they work as groups, just without nodes. So both `AUDIT_LOG` and `AUTOMOD_CENSOR` together are valid.
 I recommend just using `ALL` if you want to log everything.
 
     - ALL
