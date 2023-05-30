@@ -61,8 +61,6 @@ The following permission groups are available:
 ### `guild`
 | Node | Description | Default Level |
 | ---- | ----------- | ------------- |
-| `guild.viewcommandlevel` | Allow the user to view the permission level of a command by node. | 100 |
-| `guild.viewuserlevel` | Allow the user to view the permission level of a user. | 100 |
 | `guild.userinfo` | Allow the user to view the general user information of a user. | * |
 | `guild.guildinfo` | Allow the user to view the general guild information. | * |
 | `guild.searchself` | Allow the user to view their own infractions. | * |
