@@ -18,14 +18,6 @@ As a quick breakdown, this is what each part means (in this case, `<reason:strin
 - `string` is the type of the argument.
 - `...` is a type modifier.
 
-## Type Aliases
-
-For simplicity, some parts of the documentation use a simplified type. The aliases are listed here.
-
-| Alias  | Full Type                           |
-| ------ | ----------------------------------- |
-| `user` | <code>mention&#124;snowflake</code> |
-
 ## Argument Requirements
 
 Arguments are surrounded by either `[]` or `<>`. These show the requirement level of the argument.
@@ -50,6 +42,7 @@ Array types are a modifier that show that an argument can take multiple of the s
 Greedy types are a modifier that is only used at the end of an argument list and is always used with
 strings that take the rest of the input and turn it into one argument.
 
-### Union Types (`|`)
+### Or Types (`|`)
 
-Union types are a modifier that joins two different types together.
+Or types are a modifier that show that an argument can take multiple types. This is usually used for
+commands that target discord entities (e.g., users, roles, channels, etc.).

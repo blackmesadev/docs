@@ -1,10 +1,10 @@
 # Softban
 
-Softban (ban then unban) `target`s from the server for `reason`.
+Softban (ban then unban) [`target`](../../../reference/object-types.md#user)s from the server for `reason`.
 
 ## Syntax
 
-`!softban <target:user[]> <reason:string...>`
+`softban <target:user[]> [reason:string...]`
 
 ## Required Permission
 

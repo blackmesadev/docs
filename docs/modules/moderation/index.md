@@ -1,4 +1,22 @@
-# Module Overview
+# Moderation command index
 
-Moderation is your bog standard set of moderation tools that you would expect. All commands you will
-ever need will be in this module.
+## [`ban`](./commands/ban.md)
+#### Syntax: `ban <target:user[]> [time:duration] [reason:string...]`
+---
+## [`kick`](./commands/kick.md)
+#### Syntax: `kick <target:user[]> [reason:string...]`
+---
+## [`mute`](./commands/mute.md)
+#### Syntax: `mute <target:user[]> [time:duration] [reason:string...]`
+---
+## [`search`](./commands/search.md)
+#### Syntax: `search [target:user]`
+---
+## [`softban`](./commands/softban.md)
+#### Syntax: `softban <target:user[]> [reason:string...]`
+---
+## [`unban`](./commands/unban.md)
+#### Syntax: `unban <target:user[]> [reason:string...]`
+---
+## [`unmute`](./commands/unmute.md)
+#### Syntax: `unmute <target:user[]> [reason:string...]`

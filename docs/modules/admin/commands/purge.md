@@ -4,11 +4,11 @@ Purge `messages` messages from the channel that match `type` and `filter`.
 
 ## Syntax
 
-`!purge <messages:int> [type:string] [filter:string...]`
+`purge <messages:number> [type:string] [filter:string...]`
 
 ## Permission
 
-`moderation.purge`
+`admin.purge`
 
 ## Example
 

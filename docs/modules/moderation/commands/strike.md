@@ -1,10 +1,12 @@
 # Strike
 
-Issue a `amount` strikes to `target`s for `reason`.
+Issue a strike to [`target`](../../../reference/object-types.md#user)s (for [`time`](../../../reference/object-types.md#duration) if specified) for `reason`.
 
 ## Syntax
 
-`!strike <target:user[]> [amount:number(1)] <reason:string...>`
+`strike <target:user[]> [time:duration] [reason:string...]`
+
+If [`time`](../../../reference/object-types.md#duration) is not specified, the strike will default to the [`duration`](../../../reference/object-types.md#duration) at config value `moderation.defaultStrikeDuration`.
 
 ## Required Permission
 
@@ -13,4 +15,4 @@ Issue a `amount` strikes to `target`s for `reason`.
 ## Example
 
 - `!strike 96269247411400704 Did something stupid`
-- `!strike 96269247411400704 5 Did something stupid`
+- `!strike 96269247411400704 206309860038410240 5d Did something stupid`
