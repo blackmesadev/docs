@@ -26,7 +26,7 @@ theme:
 extra_css:
     - stylesheets/extra.css
 
-copyright: Copyright &copy; 2021 Black Mesa Development
+copyright: Copyright &copy; 2023 Black Mesa Development
 
 extra:
     social:
