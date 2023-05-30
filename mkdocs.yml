@@ -15,7 +15,7 @@ theme:
     palette:
         scheme: slate
         primary: orange
-        accent: deep orange
+        accent: orange
 
     icon:
         repo: fontawesome/brands/github
