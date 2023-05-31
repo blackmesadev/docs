@@ -11,30 +11,14 @@ a higher priority than the previous node. For example, `moderation.ban` has a hi
 `moderation`. As an example, if you were to set `moderation` to 50 and `moderation.ban` to 100, a
 user with permission level 50 would have access to all moderation commands, apart from ban.
 
-## Permission Groups
-
-Permission groups are a way to group permissions together to make it easier to manage permissions.
-Groups have the lowest permission priority.
-
-The following permission groups are available:
-
-| Group | Default Level |
-| ----- | ------------- |
-| [`moderation`](#moderation) | 50 |
-| [`admin`](#admin) | 100 |
-| [`guild`](#guild) | 0 |
-| [`roles`](#roles) | 100 |
-| [`music`](#music) | 10 |
-
-
-**Please note when you see a `*` in a default level, this means that the default level is not set and therefore inherits the level of the parent group.**
+**Please note when you see a `*` in a default group, this means that there is no override set and therefore inherits the level of the parent group.**
 
 ## Permission nodes by group
 
 ### `moderation`
 
 
-| Node | Description | Default Level |
+| Node | Description | Default Group |
 | ---- | ----------- | ------------- |
 | `moderation.ban` | Allows the user to ban users. | * |
 | `moderation.kick` | Allows the user to kick users. | * |
