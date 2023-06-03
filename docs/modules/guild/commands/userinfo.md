@@ -1,6 +1,6 @@
 # User Info
 
-Get a [`target`](../../../reference/object-types.md#user)'s user info.
+Get the user information of a given [`target`](../../../reference/object-types.md#user).
 
 ## Syntax
 

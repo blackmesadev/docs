@@ -1,6 +1,6 @@
 # Kick
 
-Kick [`target`](../../../reference/object-types.md#user)s from the server for `reason`.
+Kick [`target`](../../../reference/object-types.md#user) from the server for `reason`.
 
 ## Syntax
 

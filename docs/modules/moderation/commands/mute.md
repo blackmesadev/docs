@@ -1,6 +1,6 @@
 # Mute
 
-Mute [`target`](../../../reference/object-types.md#user)s (for [`time`](../../../reference/object-types.md#duration) if specified) for `reason`.
+Mute [`target`](../../../reference/object-types.md#user) for [`time`](../../../reference/object-types.md#duration) if specified for `reason`.
 
 ## Syntax
 

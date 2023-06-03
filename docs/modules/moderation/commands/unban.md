@@ -1,6 +1,6 @@
 # Unban
 
-Unban [`target`](../../../reference/object-types.md#user)s from the server for `reason`.
+Unban [`target`](../../../reference/object-types.md#user) from the server for `reason`.
 
 ## Syntax
 

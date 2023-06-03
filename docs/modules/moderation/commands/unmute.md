@@ -1,6 +1,6 @@
 # Unmute
 
-Unmute [`target`](../../../reference/object-types.md#user)s from the server for `reason`.
+Unmute [`target`](../../../reference/object-types.md#user) from the server for `reason`.
 
 ## Syntax
 

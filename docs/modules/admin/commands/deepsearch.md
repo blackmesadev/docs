@@ -1,6 +1,6 @@
 # Deep Search
 
-Deep search a [`target`](../../../reference/object-types.md#user)'s infractions, this shows all infractions, including those that have expired.
+Deep Search the infractions from a [`target`](../../../reference/object-types.md#user). This shows all infractions, including those that have expired.
 
 ## Syntax
 

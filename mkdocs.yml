@@ -50,3 +50,25 @@ plugins:
     - git-revision-date
     - minify:
           minify_html: true
+
+nav:
+    - 'index.md'
+    - Configuration:
+        - configuration/index.md
+        - configuration/groups.md
+        - configuration/levels.md
+        - configuration/permissions.md
+        - configuration/yaml-example.md
+
+        - Modules:
+            - configuration/modules/automod.md
+            - configuration/modules/logging.md
+            - configuration/modules/moderation.md
+
+    - Bot Reference:
+        - Command Reference: reference/command-reference.md
+        - Argument Types: reference/argument-types.md
+        - Object Types: reference/object-types.md
+
+    - API Reference:
+        - api/index.md

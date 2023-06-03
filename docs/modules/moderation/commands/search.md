@@ -1,6 +1,6 @@
 # Search
 
-Search a [`target`](../../../reference/object-types.md#user)'s infractions.
+Search the infractions from a [`target`](../../../reference/object-types.md#user).
 
 ## Syntax
 
