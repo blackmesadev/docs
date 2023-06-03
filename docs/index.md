@@ -20,13 +20,8 @@ love configuration :material-cog-outline: without compromising performance
 
 ## Who's behind it?
 
-Black Mesa was developed originally in Go by <abbr title="Tyler#0911">Tyler</abbr> and
-<abbr title="LewisTehMinerz#1337">Lewis</abbr> from the
-[Troll Discord server (Now WhatsApp)](https://discord.gg/TcnWaedK9A) as Aperture was an unreliable bot at the time.
+Black Mesa was written in [:material-language-rust:Rust](https://www.rust-lang.org/) by [@damaredayo](https://github.com/damaredayo).
 
-<abbr title="Flashy#1984">Flashy</abbr> (also from Troll) joined shortly after as a web developer to
-work on the web dashboard.
-
-It has since been rewritten from the ground up in Rust by <abbr title="Tyler#0911">Tyler</abbr> for
-performance and stability reasons.
-
+The web dashboard was written in
+[:material-language-javascript:JavaScript](https://www.typescriptlang.org/) by
+[@bartflk](https://github.com/bartflk) & [@damaredayo](https://github.com/damaredayo).
