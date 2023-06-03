@@ -3,8 +3,8 @@
 ## [`botinfo`](./commands/botinfo.md)
 #### Syntax: `botinfo`
 ---
-## [`guildinfo`](./commands/botinfo.md)
+## [`guildinfo`](./commands/guildinfo.md)
 #### Syntax: `guildinfo`
 ---
-## [`userinfo`](./commands/botinfo.md)
+## [`userinfo`](./commands/userinfo.md)
 #### Syntax: `userinfo [target:user]`
