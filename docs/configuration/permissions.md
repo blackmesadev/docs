@@ -46,6 +46,7 @@ user with permission level 50 would have access to all moderation commands, apar
 | Node | Description | Default Level |
 | ---- | ----------- | ------------- |
 | `guild.userinfo` | Allow the user to view the general user information of a user. | * |
+| `guild.userinfoself` | Allow the user to view the general user information of themselves only. | * |
 | `guild.guildinfo` | Allow the user to view the general guild information. | * |
 | `guild.searchself` | Allow the user to view their own infractions. | * |
 
