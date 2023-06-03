@@ -1,0 +1,32 @@
+:root {
+  --md-primary-fg-color: rgb(233, 162, 10);
+  --md-primary-fg-color--transparent: rgba(214, 150, 9, 0.1);
+
+  --md-footer-bg-color--light: hsla(232, 15%, 14%, 0.74);
+}
+
+.md-tabs {
+  background-color: #9f6f07;
+}
+
+.md-header {
+  color: rgba(220, 220, 220, 0.9);
+  background-color: rgb(233, 162, 10);
+}
+
+.md-content {
+  /*background-color: var(--md-footer-bg-color);*/
+  background-color: var(--md-footer-bg-color--light);
+}
+
+.md-search__input + .md-search__icon {
+  color: rgba(220, 220, 220, 0.9);
+}
+
+.--md-primary-bg-color {
+  color: rgba(220, 220, 220, 0.9);
+}
+
+.md-tabs {
+  color: rgba(220, 220, 220, 0.9);
+}
