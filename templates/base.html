@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{% block title %}{% endblock %} — {{ config.title }}</title>
+		<link rel="icon" href="{{ get_url(path='assets/monogram.png') }}" />
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<link href="{{ get_url(path='style.css') }}" rel="stylesheet" />
+		{% block extra_head %}{% endblock %}
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-lg bm-navbar">
+			<div class="container">
+				<a class="navbar-brand" href="{{ get_url(path='@/_index.md') }}">
+					<img class="bm-logo" src="{{ get_url(path='assets/monogram.svg') }}" alt="Black Mesa logo" />
+					<span class="bm-brand-text">Black Mesa</span>
+				</a>
+				<form class="bm-doc-search" id="bm-doc-search-form" role="search" aria-label="Search documentation" autocomplete="off">
+					<input
+						class="bm-doc-search-input"
+						id="bm-doc-search-input"
+						type="search"
+						name="q"
+						placeholder="Search docs"
+						autocomplete="off"
+						aria-expanded="false"
+						aria-controls="bm-doc-search-results"
+						aria-autocomplete="list"
+					/>
+					<button class="bm-doc-search-button" type="submit">Go</button>
+					<div class="bm-doc-search-results" id="bm-doc-search-results" role="listbox" aria-label="Search results"></div>
+				</form>
+			</div>
+		</nav>
+
+		<div class="bm-subnav">
+			<div class="container">
+				<ul class="nav nav-pills">
+					<li class="nav-item">
+						<a class="nav-link{% if current_path == '/' %} active{% endif %}" href="{{ get_url(path='@/_index.md') }}">Home</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link{% if current_path is starting_with('/getting-started') %} active{% endif %}" href="{{ get_url(path='@/getting-started.md') }}">Getting Started</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link{% if current_path == '/bot/commands/' %} active{% endif %}" href="{{ get_url(path='@/bot/commands.md') }}">Commands</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link{% if current_path == '/bot/configuration/' %} active{% endif %}" href="{{ get_url(path='@/bot/configuration.md') }}">Configuration</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link{% if current_path == '/bot/permissions/' %} active{% endif %}" href="{{ get_url(path='@/bot/permissions.md') }}">Permissions</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link{% if current_path is starting_with('/api') %} active{% endif %}" href="{{ get_url(path='@/api/_index.md') }}">API</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<main class="container bm-page">
+			{% block content %}{% endblock %}
+		</main>
+
+		<footer class="bm-footer">
+			<div class="container text-center py-3">
+				<p class="bm-muted small mb-0">&copy; 2023 Black Mesa Development</p>
+			</div>
+		</footer>
+
+		<script>
+			(function () {
+				const docsSearchHost = "{{ config.base_url }}";
+
+				const form = document.getElementById("bm-doc-search-form");
+				const input = document.getElementById("bm-doc-search-input");
+				const results = document.getElementById("bm-doc-search-results");
+
+				if (!form || !input || !results) {
+					return;
+				}
+
+				const pages = [
+					{
+						title: "Getting Started",
+						description: "Invite the bot, open the dashboard, and finish first setup.",
+						url: "{{ get_url(path='@/getting-started.md') }}",
+						terms: ["getting started", "setup", "install", "invite", "dashboard", "onboarding"]
+					},
+					{
+						title: "Commands",
+						description: "Command reference overview.",
+						url: "{{ get_url(path='@/bot/commands.md') }}",
+						terms: ["command", "commands", "reference"]
+					},
+					{
+						title: "Moderation",
+						description: "Ban, mute, warn, kick, unban, unmute, pardon, lookup.",
+						url: "{{ get_url(path='@/bot/commands.md') }}#moderation",
+						terms: ["moderation", "ban", "mute", "warn", "kick", "unban", "unmute", "pardon", "lookup"]
+					},
+					{
+						title: "Group Subcommands",
+						description: "Manage permission groups, members, and grants.",
+						url: "{{ get_url(path='@/bot/commands.md') }}#group-subcommands",
+						terms: ["group", "group create", "group delete", "group add", "group remove", "group grant", "group revoke"]
+					},
+					{
+						title: "Playback Controls",
+						description: "Play, pause, resume, skip, stop, seek, volume.",
+						url: "{{ get_url(path='@/bot/commands.md') }}#playback-controls",
+						terms: ["play", "pause", "resume", "skip", "stop", "seek", "volume", "current"]
+					},
+					{
+						title: "Queue & Playlist",
+						description: "Queue operations and playlist save/load.",
+						url: "{{ get_url(path='@/bot/commands.md') }}#queue-and-playlist",
+						terms: ["queue", "enqueue", "clearqueue", "playlist", "playlistsave", "playlistenqueue"]
+					},
+					{
+						title: "Configuration",
+						description: "Config keys, defaults, and examples.",
+						url: "{{ get_url(path='@/bot/configuration.md') }}",
+						terms: ["config", "configuration", "prefix", "alias", "settings", "log_channel"]
+					},
+					{
+						title: "Permissions",
+						description: "Permission nodes and group-based access model.",
+						url: "{{ get_url(path='@/bot/permissions.md') }}",
+						terms: ["permission", "permissions", "role", "group permissions", "config.edit"]
+					},
+					{
+						title: "API (OpenAPI)",
+						description: "Interactive API reference (Swagger UI).",
+						url: "{{ get_url(path='@/api/_index.md') }}",
+						terms: ["api", "openapi", "swagger", "endpoint", "integration", "auth"]
+					}
+				];
+
+				let activeIndex = -1;
+				let currentResults = [];
+
+				function closeResults() {
+					results.innerHTML = "";
+					results.classList.remove("is-open");
+					input.setAttribute("aria-expanded", "false");
+					activeIndex = -1;
+					currentResults = [];
+				}
+
+				function openResults() {
+					results.classList.add("is-open");
+					input.setAttribute("aria-expanded", "true");
+				}
+
+				function scorePage(page, query) {
+					const q = query.toLowerCase();
+					let score = 0;
+
+					if (page.title.toLowerCase().startsWith(q)) score += 9;
+					if (page.title.toLowerCase().includes(q)) score += 6;
+					if (page.description.toLowerCase().includes(q)) score += 3;
+					if (page.terms.some((term) => term.includes(q))) score += 5;
+					if (page.terms.some((term) => q.includes(term))) score += 4;
+
+					return score;
+				}
+
+				function renderResults(query) {
+					const q = query.trim().toLowerCase();
+					if (!q) {
+						closeResults();
+						return;
+					}
+
+					currentResults = pages
+						.map((page) => ({ page, score: scorePage(page, q) }))
+						.filter((entry) => entry.score > 0)
+						.sort((a, b) => b.score - a.score)
+						.slice(0, 6)
+						.map((entry) => entry.page);
+
+					if (!currentResults.length) {
+						results.innerHTML = '<div class="bm-doc-search-empty">No results. Press Enter for web search.</div>';
+						openResults();
+						activeIndex = -1;
+						return;
+					}
+
+					results.innerHTML = currentResults
+						.map(
+							(page, index) =>
+								`<a class="bm-doc-search-result${index === activeIndex ? " is-active" : ""}" role="option" data-index="${index}" href="${page.url}"><span class="bm-doc-search-result-title">${page.title}</span><span class="bm-doc-search-result-desc">${page.description}</span></a>`
+						)
+						.join("");
+
+					openResults();
+				}
+
+				function goToBestMatch() {
+					if (activeIndex >= 0 && currentResults[activeIndex]) {
+						window.location.href = currentResults[activeIndex].url;
+						return;
+					}
+
+					if (currentResults[0]) {
+						window.location.href = currentResults[0].url;
+						return;
+					}
+
+					const query = input.value.trim();
+					if (query) {
+						window.location.href = `https://duckduckgo.com/?q=${encodeURIComponent(`site:${docsSearchHost} ${query}`)}`;
+					}
+				}
+
+				input.addEventListener("input", function () {
+					activeIndex = -1;
+					renderResults(input.value);
+				});
+
+				input.addEventListener("keydown", function (event) {
+					if (!results.classList.contains("is-open")) {
+						if (event.key === "Enter") {
+							event.preventDefault();
+							goToBestMatch();
+						}
+						return;
+					}
+
+					if (event.key === "ArrowDown") {
+						event.preventDefault();
+						activeIndex = Math.min(activeIndex + 1, currentResults.length - 1);
+						renderResults(input.value);
+						return;
+					}
+
+					if (event.key === "ArrowUp") {
+						event.preventDefault();
+						activeIndex = Math.max(activeIndex - 1, -1);
+						renderResults(input.value);
+						return;
+					}
+
+					if (event.key === "Escape") {
+						event.preventDefault();
+						closeResults();
+						return;
+					}
+
+					if (event.key === "Enter") {
+						event.preventDefault();
+						goToBestMatch();
+					}
+				});
+
+				results.addEventListener("mousemove", function (event) {
+					const item = event.target.closest(".bm-doc-search-result");
+					if (!item) return;
+					activeIndex = Number(item.dataset.index || -1);
+					renderResults(input.value);
+				});
+
+				results.addEventListener("mousedown", function (event) {
+					const item = event.target.closest(".bm-doc-search-result");
+					if (!item) return;
+					event.preventDefault();
+					window.location.href = item.getAttribute("href");
+				});
+
+				form.addEventListener("submit", function (event) {
+					event.preventDefault();
+					goToBestMatch();
+				});
+
+				document.addEventListener("click", function (event) {
+					if (!form.contains(event.target)) {
+						closeResults();
+					}
+				});
+
+				document.addEventListener("keydown", function (event) {
+					if (event.key !== "/") {
+						return;
+					}
+
+					const target = event.target;
+					if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
+						return;
+					}
+
+					event.preventDefault();
+					input.focus();
+				});
+			})();
+		</script>
+	</body>
+</html>

@@ -1,0 +1,12 @@
+base_url = "https://blackmesadev.github.io/docs"
+title = "Black Mesa"
+description = "Moderation for the server owner who loves configuration."
+compile_sass = false
+build_search_index = true
+minify_html = true
+
+[markdown]
+
+[extra]
+repo_url = "https://github.com/blackmesadev/black-mesa"
+discord_url = "https://discord.gg/ZezqXEXBDJ"

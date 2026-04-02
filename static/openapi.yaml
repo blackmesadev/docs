@@ -1,0 +1,469 @@
+openapi: 3.0.3
+info:
+  title: Black Mesa API
+  version: '1.0.0'
+  description: API for Black Mesa Discord bot dashboard integrations.
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    Id:
+      type: string
+      description: Discord snowflake ID
+      pattern: '^\d+$'
+      example: '123456789012345678'
+
+    Uuid:
+      type: string
+      format: uuid
+      example: c488c9ec-423a-437c-817c-41d0d4141e58
+
+    AuthResponse:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+
+    ApiError:
+      description: Error payload returned by Actix error handlers.
+      oneOf:
+        - type: string
+        - type: object
+          additionalProperties: true
+
+    Group:
+      type: object
+      required:
+        - name
+        - roles
+        - users
+        - permissions
+      properties:
+        name:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Id'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/Id'
+        permissions:
+          type: array
+          items:
+            type: string
+
+    Config:
+      type: object
+      required:
+        - id
+        - prefix
+        - prefer_embeds
+        - inherit_discord_perms
+        - alert_on_infraction
+        - send_permission_denied
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        prefix:
+          type: string
+          default: '!'
+        mute_role:
+          allOf:
+            - $ref: '#/components/schemas/Id'
+          nullable: true
+        default_warn_duration:
+          type: integer
+          format: int64
+          nullable: true
+        log_channel:
+          allOf:
+            - $ref: '#/components/schemas/Id'
+          nullable: true
+        prefer_embeds:
+          type: boolean
+          default: false
+        inherit_discord_perms:
+          type: boolean
+          default: true
+        alert_on_infraction:
+          type: boolean
+          default: true
+        send_permission_denied:
+          type: boolean
+          default: true
+        permission_groups:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Group'
+        automod:
+          type: object
+          nullable: true
+          additionalProperties: true
+        command_aliases:
+          type: object
+          nullable: true
+          additionalProperties:
+            type: string
+
+    UserGuild:
+      type: object
+      required:
+        - id
+        - name
+        - owner
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+        icon:
+          type: string
+          nullable: true
+        permissions:
+          type: string
+          nullable: true
+        owner:
+          type: boolean
+
+    InfractionType:
+      type: string
+      enum:
+        - warn
+        - mute
+        - kick
+        - ban
+
+    Infraction:
+      type: object
+      additionalProperties: true
+      properties:
+        uuid:
+          $ref: '#/components/schemas/Uuid'
+        guild_id:
+          $ref: '#/components/schemas/Id'
+        user_id:
+          $ref: '#/components/schemas/Id'
+        moderator_id:
+          $ref: '#/components/schemas/Id'
+        infraction_type:
+          $ref: '#/components/schemas/InfractionType'
+        reason:
+          type: string
+          nullable: true
+        expires_at:
+          type: integer
+          format: int64
+          nullable: true
+        active:
+          type: boolean
+
+    CreateInfractionRequest:
+      type: object
+      required:
+        - guild_id
+        - user_id
+        - moderator_id
+        - infraction_type
+      properties:
+        guild_id:
+          $ref: '#/components/schemas/Id'
+        user_id:
+          $ref: '#/components/schemas/Id'
+        moderator_id:
+          $ref: '#/components/schemas/Id'
+        infraction_type:
+          $ref: '#/components/schemas/InfractionType'
+        reason:
+          type: string
+          nullable: true
+        expires_at:
+          type: integer
+          format: int64
+          nullable: true
+        mute_role_id:
+          allOf:
+            - $ref: '#/components/schemas/Id'
+          nullable: true
+
+    DeactivateResponse:
+      type: object
+      required:
+        - success
+        - id
+      properties:
+        success:
+          type: boolean
+          example: true
+        id:
+          type: string
+
+paths:
+  /healthz:
+    get:
+      summary: Health check endpoint
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: OK
+
+  /oauth/discord:
+    get:
+      summary: Exchange Discord OAuth code for API JWT
+      parameters:
+        - in: query
+          name: code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /oauth/refresh:
+    get:
+      summary: Refresh Discord token and issue a new API JWT
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully refreshed token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /api/guilds:
+    get:
+      summary: List guilds the authenticated user can manage
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Guild list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserGuild'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /api/config/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/Id'
+    get:
+      summary: Get guild configuration
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Config document
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+        '401':
+          description: Unauthorized or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Config not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      summary: Update guild configuration
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config'
+      responses:
+        '200':
+          description: Updated config
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /api/infractions/{guild_id}:
+    get:
+      summary: List or search infractions for a guild
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: guild_id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+        - in: query
+          name: user_id
+          required: false
+          schema:
+            $ref: '#/components/schemas/Id'
+        - in: query
+          name: type
+          required: false
+          schema:
+            $ref: '#/components/schemas/InfractionType'
+        - in: query
+          name: active
+          required: false
+          schema:
+            type: string
+            enum: ['true', 'false']
+      responses:
+        '200':
+          description: Matching infractions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Infraction'
+        '400':
+          description: Invalid query or guild ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /api/infractions:
+    post:
+      summary: Create a new infraction
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInfractionRequest'
+      responses:
+        '200':
+          description: Created infraction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Infraction'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /api/infractions/{guild_id}/{id}/deactivate:
+    post:
+      summary: Deactivate an infraction
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: guild_id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Id'
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+      responses:
+        '200':
+          description: Deactivation status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeactivateResponse'
+        '400':
+          description: Invalid ID or already inactive
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Config or infraction not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+	<div class="col-12">
+		<section class="card bm-card">
+			<div class="card-body bm-prose">
+				{{ section.content | safe }}
+			</div>
+		</section>
+	</div>
+</div>
+{% endblock %}

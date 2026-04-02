@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}{{ section.title }}{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+	{% if section.path is starting_with('/api') %}
+	<div class="col-12">
+		<section class="card bm-card">
+			<div class="card-body bm-prose">
+				{{ section.content | safe }}
+			</div>
+		</section>
+	</div>
+	{% else %}
+	<div class="col-12 col-lg-8">
+		<section class="card bm-card">
+			<div class="card-body bm-prose">
+				{{ section.content | safe }}
+			</div>
+		</section>
+	</div>
+	<div class="col-12 col-lg-4">
+		<nav class="card bm-card h-100">
+			<div class="card-body">
+				<h2 class="h5">Pages</h2>
+				<div class="d-grid gap-2">
+					{% for page in section.pages %}
+					<a class="btn btn-outline-light" href="{{ page.path }}">{{ page.title }}</a>
+					{% endfor %}
+				</div>
+			</div>
+		</nav>
+	</div>
+	{% endif %}
+</div>
+{% endblock %}
