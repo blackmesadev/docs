@@ -1,4 +1,4 @@
-base_url = "https://blackmesadev.github.io/docs"
+base_url = "https://blackmesa.dhopcs.org/docs/"
 title = "Black Mesa"
 description = "Moderation for the server owner who loves configuration."
 compile_sass = false

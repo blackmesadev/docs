@@ -10,7 +10,7 @@ insert_anchor_links = "none"
 
 <div style="text-align: center; margin: 1.5rem 0">
 	<a class="btn btn-warning me-2" href="https://discord.com/api/oauth2/authorize?client_id=815646963693256704&permissions=402972678&scope=bot">Invite</a>
-	<a class="btn btn-outline-light me-2" href="https://blackmesa.dhopcs.org/">Dashboard</a>
+	<a class="btn btn-outline-light me-2" href="https://blackmesa.dhopcs.org/dashboard">Dashboard</a>
 	<a class="btn btn-outline-light" href="https://discord.gg/ZezqXEXBDJ">Support</a>
 </div>
 
