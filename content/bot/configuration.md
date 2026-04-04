@@ -22,6 +22,7 @@ Guild configuration is stored as `Config` (defined in `lib/src/model/config.rs` 
 | `moderation_enabled` | `bool` | `false` | Enable moderation commands (`kick`, `ban`, `mute`, `warn`, etc.). |
 | `music_enabled` | `bool` | `false` | Enable music/audio playback commands. Requires a running Mesastream instance. |
 | `automod_enabled` | `bool` | `false` | Enable the automod engine (censor and spam filters). |
+| `logging_enabled` | `bool` | `false` | Enable the per-event logging system. See [Logging](@/bot/logging.md). |
 | `permission_groups` | `Group[]?` | `null` | Named permission groups with bound users, roles, and permission bits. |
 | `automod` | `Automod?` | `null` | Automod settings. Only evaluated when `automod_enabled` is `true`. |
 | `command_aliases` | `map<string,string>?` | `null` | Alias → command mapping (e.g. `{"w": "warn"}`). |
@@ -55,7 +56,7 @@ Automod operates at two levels: a `global` setting applied to all channels, and 
 
 | Key | Type | Default | Description |
 | --- | --- | --- | --- |
-| `name` | `string` | — | Human label for this settings block. |
+| `name` | `string` | - | Human label for this settings block. |
 | `enabled` | `bool` | `false` | Whether this settings block is active. |
 | `censors` | `map<CensorType, Censor>?` | `null` | Censor filters. Keys: `word`, `link`, `invite`. |
 | `spam` | `SpamFilter?` | `null` | Spam detection settings. |
@@ -65,12 +66,12 @@ Automod operates at two levels: a `global` setting applied to all channels, and 
 
 | Key | Type | Default | Description |
 | --- | --- | --- | --- |
-| `enabled` | `bool` | — | Whether this censor is active. |
+| `enabled` | `bool` | - | Whether this censor is active. |
 | `whitelist` | `bool` | `false` | If `true`, only messages that do **not** match the filters are blocked (whitelist mode). |
-| `filters` | `string[]` | — | List of patterns to match. `word` supports `*` (wildcard) and `...` (requires content between start/end). `link` uses exact domain names. `invite` uses exact Discord invite codes. |
+| `filters` | `string[]` | - | List of patterns to match. `word` supports `*` (wildcard) and `...` (requires content between start/end). `link` uses exact domain names. `invite` uses exact Discord invite codes. |
 | `ignore_whitespace` | `bool` | `false` | Strip whitespace from message content before matching. |
 | `bypass` | `PermissionOverride?` | `null` | Groups/roles/users exempt from this specific censor. |
-| `action` | `CensorAction` | — | Action to take on match. |
+| `action` | `CensorAction` | - | Action to take on match. |
 
 ### CensorAction shape
 
@@ -188,12 +189,12 @@ Most configuration can be changed from Discord directly:
 | --- | --- |
 | Change prefix | `setprefix <prefix>` |
 | Set a config key | `setconfig <key> <value>` |
-| Enable/disable modules | `setconfig moderation_enabled true` (not supported — use API) |
+| Enable/disable modules | `setconfig moderation_enabled true` (not supported - use API) |
 | Manage groups | `group create/delete/add/remove/grant/revoke ...` |
 | Manage aliases | `addalias <alias> <command>` / `removealias <alias>` |
 
 Module flags (`moderation_enabled`, `music_enabled`, `automod_enabled`) and `automod` settings
-cannot be changed via `setconfig` — use `POST /api/config/{id}` or the dashboard.
+cannot be changed via `setconfig` - use `POST /api/config/{id}` or the dashboard.
 
 **Examples:**
 

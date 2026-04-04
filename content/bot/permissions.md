@@ -90,11 +90,11 @@ When stored or returned by the API, `permissions` is a plain **`u64` integer** (
 For every command invocation the following sources are evaluated in order, and access is granted if
 **any** source satisfies the required flag:
 
-1. **Guild owner** — always bypasses all permission checks.
-2. **Discord role permissions** (only when `inherit_discord_perms = true`) — Discord permissions
+1. **Guild owner** - always bypasses all permission checks.
+2. **Discord role permissions** (only when `inherit_discord_perms = true`) - Discord permissions
    such as `KICK_MEMBERS` or `BAN_MEMBERS` are mapped to equivalent Black Mesa flags automatically.
    `ADMINISTRATOR` maps to `ALL`.
-3. **Permission groups** — the caller's user ID is compared against the `users` set of every
+3. **Permission groups** - the caller's user ID is compared against the `users` set of every
    `PermissionGroup`. If a matching group holds the required flag bit the check passes.
 
 > Role-based group membership (`group.roles`) is checked when the API calls
@@ -118,7 +118,7 @@ imply Black Mesa permission flags:
 
 **Example:** A Discord role with `KICK_MEMBERS` and `MANAGE_MESSAGES` will automatically gain
 `MODERATION_KICK`, `MODERATION_WARN`, `MODERATION_PARDON`, `MODERATION_PURGE`, and
-`MODERATION_LOOKUP` — no `group grant` needed. Use `inherit_discord_perms = false` to opt out
+`MODERATION_LOOKUP` - no `group grant` needed. Use `inherit_discord_perms = false` to opt out
 and manage all access through groups exclusively.
 
 ## Group-based access model
@@ -134,7 +134,7 @@ Groups are the primary way to grant granular permissions beyond what Discord rol
 4. Reserve `CONFIG_EDIT` for trusted admins only.
 5. Add individual users to groups only for special-case overrides.
 
-**Composite flag example** — grant all music permissions at once:
+**Composite flag example** - grant all music permissions at once:
 ```
 group create dj
 group add dj @DJ-Role
@@ -144,17 +144,17 @@ group grant dj MUSIC
 **Full tiered staff example:**
 
 ```
-# Tier 1 — junior moderators: kick, warn, lookup only
+# Tier 1 - junior moderators: kick, warn, lookup only
 group create junior-mods
 group add junior-mods @Junior-Mod
 group grant junior-mods MODERATION_KICK MODERATION_WARN MODERATION_LOOKUP
 
-# Tier 2 — moderators: all moderation actions
+# Tier 2 - moderators: all moderation actions
 group create moderators
 group add moderators @Moderator
 group grant moderators MODERATION
 
-# Tier 3 — admins: moderation + full config access
+# Tier 3 - admins: moderation + full config access
 group create admins
 group add admins @Admin
 group grant admins MODERATION CONFIG
@@ -169,7 +169,7 @@ group create staff-api
 group add staff-api @Staff
 group grant staff-api INFRACTION_VIEW
 
-# Single-user override — add a specific user to a group without a role
+# Single-user override - add a specific user to a group without a role
 group add admins 987654321098765432
 ```
 

@@ -35,14 +35,14 @@ group grant moderators MODERATION
 
 ## First-time setup checklist
 
-1. **Enable modules** — moderation and music are disabled by default. Enable them in the dashboard
+1. **Enable modules** - moderation and music are disabled by default. Enable them in the dashboard
    under Config, or via `POST /api/config/{id}` with `"moderation_enabled": true`.
-2. **Set your prefix** — default is `!`. Change with `setprefix <prefix>`.
-3. **Set `log_channel`** — channel where moderation actions are logged.
-4. **Set `mute_role`** — required before the `mute` command will work.
-5. **Create groups** — create role-aligned groups and grant the appropriate permission flags.
+2. **Set your prefix** - default is `!`. Change with `setprefix <prefix>`.
+3. **Set `log_channel`** - channel where moderation actions are logged.
+4. **Set `mute_role`** - required before the `mute` command will work.
+5. **Create groups** - create role-aligned groups and grant the appropriate permission flags.
    See [Permissions](@/bot/permissions.md) for flag names.
-6. **Test** — try a moderation command in a private staff channel to verify everything works.
+6. **Test** - try a moderation command in a private staff channel to verify everything works.
 
 ## Navigate these docs by task
 

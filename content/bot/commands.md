@@ -167,7 +167,7 @@ ban @User No reason required for permanent ban
 mute @User 1h Heated argument
 mute @User 30m
 
-# Warn — uses default_warn_duration if no time given
+# Warn - uses default_warn_duration if no time given
 warn @User First offense
 warn @User 30d Continued behaviour after warning
 
