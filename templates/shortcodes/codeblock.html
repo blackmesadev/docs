@@ -1,0 +1,13 @@
+<div class="bm-codeblock">
+	<div class="bm-codeblock-header">
+		{% if title is defined and title %}
+		<span class="bm-codeblock-title">{{ title }}</span>
+		{% elif lang is defined and lang %}
+		<span class="bm-codeblock-lang">{{ lang }}</span>
+		{% endif %}
+		<button class="bm-copy-btn" type="button" aria-label="Copy to clipboard">Copy</button>
+	</div>
+	<div class="bm-codeblock-body">
+		{{ body | safe }}
+	</div>
+</div>

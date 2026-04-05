@@ -33,7 +33,7 @@ a:hover {
 	color: #ffe5ad;
 }
 
-/* ── Top bar ─────────────────────────────────────────────── */
+/* Top bar */
 
 .bm-navbar {
 	background-color: var(--bm-primary);
@@ -173,7 +173,7 @@ a:hover {
 	letter-spacing: 0.01em;
 }
 
-/* ── Sub-navigation tabs ─────────────────────────────────── */
+/* Sub-navigation tabs */
 
 .bm-subnav {
 	background: var(--bm-primary-dark);
@@ -205,7 +205,7 @@ a:hover {
 	font-weight: 600;
 }
 
-/* ── Layout ──────────────────────────────────────────────── */
+/* Layout */
 
 .bm-page {
 	padding: 1.5rem 0 3rem;
@@ -217,7 +217,7 @@ a:hover {
 	margin-top: 2rem;
 }
 
-/* ── Cards ───────────────────────────────────────────────── */
+/* Cards */
 
 .bm-card {
 	background: var(--bm-surface);
@@ -240,7 +240,7 @@ a:hover {
 	color: var(--bm-muted);
 }
 
-/* ── Buttons ─────────────────────────────────────────────── */
+/* Buttons */
 
 .btn-outline-light {
 	border-color: rgba(255, 255, 255, 0.45);
@@ -272,7 +272,7 @@ a:hover {
 	outline: none;
 }
 
-/* ── Prose / markdown content ────────────────────────────── */
+/* Prose / markdown content */
 
 .bm-prose {
 	line-height: 1.7;
@@ -375,7 +375,7 @@ a:hover {
 	border-radius: 0.5rem;
 }
 
-/* ── Swagger UI overrides ────────────────────────────────── */
+/* Swagger UI overrides */
 
 .bm-openapi-shell {
 	background: rgba(0, 0, 0, 0.18);
@@ -449,4 +449,75 @@ a:hover {
 		flex-wrap: nowrap;
 		overflow-x: auto;
 	}
+}
+
+/* Copy button - injected on bare pre blocks */
+
+.bm-prose pre {
+	position: relative;
+}
+
+.bm-copy-btn {
+	background: rgba(255, 255, 255, 0.07);
+	border: 1px solid var(--bm-border);
+	color: var(--bm-muted);
+	font-size: 0.7rem;
+	font-weight: 600;
+	padding: 0.18rem 0.5rem;
+	border-radius: 0.3rem;
+	cursor: pointer;
+	line-height: 1.5;
+	transition:
+		background 0.12s,
+		color 0.12s;
+	white-space: nowrap;
+}
+
+.bm-copy-btn:hover {
+	background: rgba(255, 255, 255, 0.14);
+	color: #fff;
+}
+
+.bm-copy-btn--inline {
+	position: absolute;
+	top: 0.45rem;
+	right: 0.45rem;
+}
+
+/* Named codeblock shortcode */
+
+.bm-codeblock {
+	margin: 1em 0;
+	border: 1px solid var(--bm-border);
+	border-radius: 0.5rem;
+	overflow: hidden;
+}
+
+.bm-codeblock-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.3rem 0.65rem;
+	background: rgba(0, 0, 0, 0.22);
+	border-bottom: 1px solid var(--bm-border);
+	gap: 0.5rem;
+}
+
+.bm-codeblock-title,
+.bm-codeblock-lang {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: var(--bm-muted);
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.bm-codeblock-body pre {
+	margin: 0;
+	border: none;
+	border-radius: 0;
 }

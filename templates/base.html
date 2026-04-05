@@ -58,6 +58,9 @@
 					<li class="nav-item">
 						<a class="nav-link{% if current_path is starting_with('/api') %} active{% endif %}" href="{{ get_url(path='@/api/_index.md') }}">API</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link{% if current_path is starting_with('/technical') %} active{% endif %}" href="{{ get_url(path='@/technical/_index.md') }}">Technical</a>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -68,6 +71,9 @@
 
 		<footer class="bm-footer">
 			<div class="container text-center py-3">
+				<p class="bm-muted small mb-1">
+					<a href="{{ get_url(path='@/privacy.md') }}" class="text-muted">Privacy Policy</a>
+				</p>
 				<p class="bm-muted small mb-0">&copy; 2023 Black Mesa Development</p>
 			</div>
 		</footer>
@@ -138,6 +144,18 @@
 						description: "Interactive API reference (Swagger UI).",
 						url: "{{ get_url(path='@/api/_index.md') }}",
 						terms: ["api", "openapi", "swagger", "endpoint", "integration", "auth"]
+					},
+					{
+						title: "Privacy Policy",
+						description: "Data collection, retention, and your rights.",
+						url: "{{ get_url(path='@/privacy.md') }}",
+						terms: ["privacy", "policy", "gdpr", "data", "security", "cookies", "telemetry"]
+					},
+					{
+						title: "Local Deployment",
+						description: "Clone and run the full stack locally with Docker Compose.",
+						url: "{{ get_url(path='@/technical/local-deploy.md') }}",
+						terms: ["deploy", "deployment", "local", "docker", "compose", "self-host", "install"]
 					}
 				];
 
@@ -298,5 +316,46 @@
 				});
 			})();
 		</script>
-	</body>
-</html>
+		<script>
+			(function () {
+				document.addEventListener("DOMContentLoaded", function () {
+					// Add inline copy buttons to all bare pre blocks (not inside .bm-codeblock)
+					document.querySelectorAll(".bm-prose pre").forEach(function (pre) {
+						if (pre.closest(".bm-codeblock")) return;
+						var btn = document.createElement("button");
+						btn.className = "bm-copy-btn bm-copy-btn--inline";
+						btn.textContent = "Copy";
+						btn.setAttribute("type", "button");
+						btn.setAttribute("aria-label", "Copy to clipboard");
+						btn.addEventListener("click", function () {
+							var code = pre.querySelector("code");
+							navigator.clipboard
+								.writeText(code ? code.textContent : pre.textContent)
+								.then(function () {
+									btn.textContent = "Copied!";
+									setTimeout(function () {
+										btn.textContent = "Copy";
+									}, 2000);
+								});
+						});
+						pre.appendChild(btn);
+					});
+
+					// Copy buttons inside .bm-codeblock headers
+					document.querySelectorAll(".bm-codeblock .bm-copy-btn").forEach(function (btn) {
+						btn.addEventListener("click", function () {
+							var block = btn.closest(".bm-codeblock");
+							var code = block && block.querySelector("code");
+							navigator.clipboard
+								.writeText(code ? code.textContent : "")
+								.then(function () {
+									btn.textContent = "Copied!";
+									setTimeout(function () {
+										btn.textContent = "Copy";
+									}, 2000);
+								});
+						});
+					});
+				});
+			})();
+		</script>
