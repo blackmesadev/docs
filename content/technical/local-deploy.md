@@ -19,7 +19,7 @@ Black Mesa is split across four repositories. Clone them all into one working
 directory - the Dockerfiles and Compose file expect them as siblings.
 
 ```bash
-mkdir blackmesa && cd blackmesa
+mkdir blackmesadev && cd blackmesadev
 git clone https://github.com/blackmesadev/black-mesa.git
 git clone https://github.com/blackmesadev/lib.git
 git clone https://github.com/blackmesadev/api.git
@@ -29,7 +29,7 @@ git clone https://github.com/blackmesadev/mesastream.git
 After cloning, your directory should look like:
 
 ```
-blackmesa/
+blackmesadev/
 ├── api/
 ├── black-mesa/
 ├── lib/
@@ -44,7 +44,8 @@ compiler uses the copy you just cloned.
 
 In `black-mesa/Cargo.toml`, swap the two `bm-lib` lines:
 
-{% codeblock(title="black-mesa/Cargo.toml") %}
+**black-mesa/Cargo.toml**
+
 ```toml
 # Comment out the git source:
 # bm-lib = { git = "https://github.com/blackmesadev/lib.git" }
@@ -52,16 +53,15 @@ In `black-mesa/Cargo.toml`, swap the two `bm-lib` lines:
 # Uncomment the local path:
 bm-lib = { path = "../lib" }
 ```
-{% end %}
 
 Do the same in `api/Cargo.toml`:
 
-{% codeblock(title="api/Cargo.toml") %}
+**api/Cargo.toml**
+
 ```toml
 # bm-lib = { git = "https://github.com/blackmesadev/lib.git" }
 bm-lib = { path = "../lib" }
 ```
-{% end %}
 
 > **Why?** The Dockerfiles already copy `./lib` into the build context with
 > `COPY ./lib /app/lib`. With the `path` dependency active, Cargo uses that
@@ -74,7 +74,8 @@ Create `docker-compose.yml` in the root `blackmesa/` directory. The example
 below mirrors the production layout with placeholder credentials - replace every
 occurrence of `changeme` with strong random values before running.
 
-{% codeblock(title="blackmesa/docker-compose.yml") %}
+**blackmesa/docker-compose.yml**
+
 ```yaml
 services:
   black-mesa:
@@ -161,7 +162,6 @@ networks:
     name: blackmesa-network
     external: true
 ```
-{% end %}
 
 The Compose file includes **OpenObserve** for collecting traces, logs, and metrics
 from all services. The Black Mesa services are instrumented with OpenTelemetry and

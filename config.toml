@@ -7,6 +7,11 @@ minify_html = true
 
 [markdown]
 
+[markdown.highlighting]
+code = true
+style = "inline"
+theme = "github-dark"
+
 [extra]
 repo_url = "https://github.com/blackmesadev/black-mesa"
 discord_url = "https://discord.gg/ZezqXEXBDJ"

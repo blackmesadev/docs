@@ -56,9 +56,6 @@
 						<a class="nav-link{% if current_path == '/bot/permissions/' %} active{% endif %}" href="{{ get_url(path='@/bot/permissions.md') }}">Permissions</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link{% if current_path is starting_with('/api') %} active{% endif %}" href="{{ get_url(path='@/api/_index.md') }}">API</a>
-					</li>
-					<li class="nav-item">
 						<a class="nav-link{% if current_path is starting_with('/technical') %} active{% endif %}" href="{{ get_url(path='@/technical/_index.md') }}">Technical</a>
 					</li>
 				</ul>
@@ -142,7 +139,7 @@
 					{
 						title: "API (OpenAPI)",
 						description: "Interactive API reference (Swagger UI).",
-						url: "{{ get_url(path='@/api/_index.md') }}",
+						url: "{{ get_url(path='@/technical/api/_index.md') }}",
 						terms: ["api", "openapi", "swagger", "endpoint", "integration", "auth"]
 					},
 					{

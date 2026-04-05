@@ -8,6 +8,7 @@
 		<button class="bm-copy-btn" type="button" aria-label="Copy to clipboard">Copy</button>
 	</div>
 	<div class="bm-codeblock-body">
-		{{ body | safe }}
+		{% set source = body | trim %}
+		<pre><code{% if lang is defined and lang %} class="language-{{ lang }}"{% endif %}>{{ source | escape }}</code></pre>
 	</div>
 </div>

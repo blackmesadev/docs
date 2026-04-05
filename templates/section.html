@@ -25,6 +25,10 @@
 			<div class="card-body">
 				<h2 class="h5">Pages</h2>
 				<div class="d-grid gap-2">
+					{% for subsection_path in section.subsections %}
+					{% set subsection = get_section(path=subsection_path) %}
+					<a class="btn btn-outline-light" href="{{ subsection.path }}">{{ subsection.title }}</a>
+					{% endfor %}
 					{% for page in section.pages %}
 					<a class="btn btn-outline-light" href="{{ page.path }}">{{ page.title }}</a>
 					{% endfor %}
