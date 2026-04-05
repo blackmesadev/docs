@@ -11,7 +11,6 @@ stack locally with Docker Compose.
 - **Docker 24+** with the Compose plugin - verify with `docker compose version`
 - **Git**
 - A **Discord application** with a bot token ([create one here](https://discord.com/developers/applications))
-- ~3 GB of free RAM for the combined containers (including observability stack)
 
 ## 1. Clone the repositories
 
