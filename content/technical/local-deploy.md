@@ -24,6 +24,7 @@ git clone https://github.com/blackmesadev/black-mesa.git
 git clone https://github.com/blackmesadev/lib.git
 git clone https://github.com/blackmesadev/api.git
 git clone https://github.com/blackmesadev/mesastream.git
+git clone https://github.com/blackmesadev/dashboard.git
 ```
 
 After cloning, your directory should look like:
@@ -32,13 +33,15 @@ After cloning, your directory should look like:
 blackmesadev/
 ├── api/
 ├── black-mesa/
+├── dashboard/
 ├── lib/
 └── mesastream/
+
 ```
 
 ## 2. Switch to local library paths
 
-By default, for production, `black-mesa` and `api` reference `bm-lib` from GitHub. For a local
+By default, for production, `black-mesa`, `api`, and `mesastream` reference `bm-lib` from GitHub. For a local
 build where `lib/` is already on disk, switch to the path dependency so the
 compiler uses the copy you just cloned.
 
@@ -61,6 +64,30 @@ Do the same in `api/Cargo.toml`:
 ```toml
 # bm-lib = { git = "https://github.com/blackmesadev/lib.git" }
 bm-lib = { path = "../lib" }
+```
+
+And in `mesastream/Cargo.toml`:
+
+**mesastream/Cargo.toml**
+
+```toml
+# bm-lib = { git = "https://github.com/blackmesadev/lib.git" }
+bm-lib = { path = "../lib" }
+```
+
+Next, update each Dockerfile so the local `lib/` directory is copied into the build context.
+All three currently have this line commented out as `# COPY ./lib /app/lib`.
+
+Uncomment it in:
+
+- `black-mesa/Dockerfile`
+- `api/Dockerfile`
+- `mesastream/Dockerfile`
+
+So it becomes:
+
+```dockerfile
+COPY ./lib /app/lib
 ```
 
 > **Why?** The Dockerfiles already copy `./lib` into the build context with
@@ -171,22 +198,74 @@ A key note for contributing, any function that does a major piece of logic, or i
 
 ## 4. Configure environment files
 
-Each service reads a `.env` file in its own directory. Create them before
-starting. The key variables each service expects:
+Each service reads a `.env` file in its own directory. The easiest setup is to
+copy the provided examples first:
 
-| File | Key variables |
-| --- | --- |
-| `black-mesa/.env` | `DISCORD_TOKEN`, `DATABASE_URL`, `REDIS_URL`, `OTEL_EXPORTER_OTLP_ENDPOINT` |
-| `api/.env` | `DATABASE_URL`, `REDIS_URL`, `JWT_SECRET`, `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`, `OTEL_EXPORTER_OTLP_ENDPOINT` |
-| `mesastream/.env` | `REDIS_URL`, `OTEL_EXPORTER_OTLP_ENDPOINT` |
+```bash
+cp black-mesa/.env.example black-mesa/.env
+cp api/.env.example api/.env
+cp mesastream/.env.example mesastream/.env
+```
+
+Then edit each `.env` and replace placeholder values (`changeme`,
+`replace_with_secure_password`, etc.) with real values for your machine.
+
+### Get Discord credentials from the Developer Dashboard
+
+Open the Discord Developer Portal: <https://discord.com/developers/applications>
+
+1. Create/select your application.
+2. In **OAuth2 -> General**, copy:
+  - **Client ID** -> use as `DISCORD_CLIENT_ID`
+  - **Client Secret** -> use as `DISCORD_CLIENT_SECRET`
+3. In **Bot**, create/reset and copy the **Bot Token**:
+  - use as `DISCORD_BOT_TOKEN` in `api/.env`
+  - use as `DISCORD_TOKEN` in `black-mesa/.env`
+
+Keep these values private. If a token leaks, regenerate it in the portal.
 
 `DATABASE_URL` should match the Postgres credentials in your Compose file, e.g.
-`postgres://mesa:changeme@localhost:5432/blackmesa`. `REDIS_URL` should include
+`postgres://mesa:changeme@localhost:5432/blackmesa`. `REDIS_URI` should include
 the password you set, e.g. `redis://:changeme@localhost:6379`.
 
-**Optional telemetry:** To send traces and logs to OpenObserve, set
-`OTEL_EXPORTER_OTLP_ENDPOINT=http://openobserve:5080/api/default/` in each
-service's `.env` file. This enables distributed tracing across the entire stack.
+### Bake OTLP auth token from OpenObserve credentials
+
+OpenObserve OTLP expects an `Authorization` header. In this stack, pass it via
+`OTLP_AUTH` as a Basic token built from the same username/password you configured
+for OpenObserve (`ZO_ROOT_USER_EMAIL` and `ZO_ROOT_USER_PASSWORD` in Compose).
+
+```bash
+# Replace with the values from docker-compose.yml
+OO_USER="admin@example.com"
+OO_PASS="changeme"
+
+# Linux: -w0 disables line wrapping
+BASE64_TOKEN=$(printf '%s' "${OO_USER}:${OO_PASS}" | base64 -w0)
+echo "OTLP_AUTH=Basic ${BASE64_TOKEN}"
+```
+
+Then set these in each service `.env` (uncommenting optional lines where needed):
+
+```bash
+OTLP_AUTH="Basic ${BASE64_TOKEN}"
+OTLP_ORGANIZATION=default
+```
+
+To apply the baked token to all service `.env` files in one go:
+
+```bash
+
+for f in black-mesa/.env api/.env mesastream/.env; do
+  if grep -q '^OTLP_AUTH=' "$f"; then
+    sed -i "s|^OTLP_AUTH=.*|OTLP_AUTH=\"${OTLP_AUTH}\"|" "$f"
+  else
+    printf '\nOTLP_AUTH="%s"\n' "$OTLP_AUTH" >> "$f"
+  fi
+done
+```
+
+If your `.env` files still contain the placeholder `OTLP_AUTH="Basic your_base64_encoded_auth_token"`,
+the command above will replace it automatically.
 
 See each repository's `README.md` for the complete variable reference.
 
@@ -219,7 +298,58 @@ docker compose logs -f black-mesa mesa-api mesastream
 - **OpenObserve UI:** `http://localhost:5080` (login with the credentials from your Compose file)
 
 Once logged into OpenObserve, navigate to **Traces** or **Logs** to view telemetry
-from the running services (if you configured `OTEL_EXPORTER_OTLP_ENDPOINT`).
+from the running services (if you configured `OTLP_ENDPOINT`).
+
+## 7. Dashboard setup (local OAuth flow)
+
+Copy the dashboard env example, then edit values:
+
+```bash
+cp dashboard/.env.example dashboard/.env
+```
+
+Set these in `dashboard/.env`:
+
+```bash
+VITE_API_BASE_URL=http://localhost:8080/api
+VITE_DISCORD_CLIENT_ID=<your_discord_client_id>
+```
+
+For local dev at the root path (`/`), use:
+
+```bash
+VITE_DISCORD_REDIRECT_URI=http://localhost:4173/oauth/discord
+# leave VITE_BASE_PATH unset
+```
+
+If you intentionally run dashboard under `/dashboard/`, use:
+
+```bash
+VITE_DISCORD_REDIRECT_URI=http://localhost:4173/dashboard/oauth/discord
+VITE_BASE_PATH=/dashboard/
+```
+
+Make sure your API env uses the same callback URL:
+
+```bash
+# in api/.env
+DISCORD_REDIRECT_URI=http://localhost:4173/oauth/discord
+```
+
+In Discord Developer Portal -> **OAuth2 -> Redirects**, add:
+
+- `http://localhost:4173/oauth/discord`
+- `http://localhost:4173/dashboard/oauth/discord` (only if using `VITE_BASE_PATH=/dashboard/`)
+
+Then start the dashboard: (functionality is Nothing until you have the API running and properly connected to Discord)
+
+```bash
+cd dashboard
+pnpm i
+pnpm run dev
+```
+
+Open `http://localhost:4173` and test **Login with Discord**.
 
 ## Stopping and cleanup
 
