@@ -18,11 +18,11 @@ Black Mesa is split across four repositories. Clone them all into one working
 directory - the Dockerfiles and Compose file expect them as siblings.
 
 ```bash
-mkdir blackmesadev && cd blackmesadev
-git clone https://github.com/blackmesadev/black-mesa.git
-git clone https://github.com/blackmesadev/lib.git
-git clone https://github.com/blackmesadev/api.git
-git clone https://github.com/blackmesadev/mesastream.git
+mkdir blackmesadev && cd blackmesadev && \
+git clone https://github.com/blackmesadev/black-mesa.git && \
+git clone https://github.com/blackmesadev/lib.git && \
+git clone https://github.com/blackmesadev/api.git && \
+git clone https://github.com/blackmesadev/mesastream.git && \
 git clone https://github.com/blackmesadev/dashboard.git
 ```
 
