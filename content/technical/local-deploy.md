@@ -30,11 +30,11 @@ After cloning, your directory should look like:
 
 ```
 blackmesadev/
-├── api/
-├── black-mesa/
-├── dashboard/
-├── lib/
-└── mesastream/
+├-- api/
+├-- black-mesa/
+├-- dashboard/
+├-- lib/
+└-- mesastream/
 
 ```
 
@@ -209,6 +209,34 @@ cp mesastream/.env.example mesastream/.env
 Then edit each `.env` and replace placeholder values (`changeme`,
 `replace_with_secure_password`, etc.) with real values for your machine.
 
+Quick setup with sed (replace the example values with your actual credentials):
+
+```bash
+# Set your actual credentials
+DISCORD_TOKEN="your_bot_token_here"
+DISCORD_CLIENT_ID="your_client_id_here"
+DISCORD_CLIENT_SECRET="your_client_secret_here"
+DB_PASSWORD="your_secure_db_password"
+REDIS_PASSWORD="your_secure_redis_password"
+JWT_SECRET="your_random_jwt_secret_minimum_32_chars"
+
+# Update black-mesa/.env
+sed -i "s|DISCORD_TOKEN=.*|DISCORD_TOKEN=\"${DISCORD_TOKEN}\"|" black-mesa/.env
+sed -i "s|postgres://mesa:[^@]*@|postgres://mesa:${DB_PASSWORD}@|" black-mesa/.env
+sed -i "s|redis://:[^@]*@|redis://:${REDIS_PASSWORD}@|" black-mesa/.env
+
+# Update api/.env
+sed -i "s|DISCORD_BOT_TOKEN=.*|DISCORD_BOT_TOKEN=\"${DISCORD_TOKEN}\"|" api/.env
+sed -i "s|DISCORD_CLIENT_ID=.*|DISCORD_CLIENT_ID=\"${DISCORD_CLIENT_ID}\"|" api/.env
+sed -i "s|DISCORD_CLIENT_SECRET=.*|DISCORD_CLIENT_SECRET=\"${DISCORD_CLIENT_SECRET}\"|" api/.env
+sed -i "s|JWT_SECRET=.*|JWT_SECRET=\"${JWT_SECRET}\"|" api/.env
+sed -i "s|postgres://mesa:[^@]*@|postgres://mesa:${DB_PASSWORD}@|" api/.env
+sed -i "s|redis://:[^@]*@|redis://:${REDIS_PASSWORD}@|" api/.env
+
+# Update mesastream/.env
+sed -i "s|redis://:[^@]*@|redis://:${REDIS_PASSWORD}@|" mesastream/.env
+```
+
 ### Get Discord credentials from the Developer Dashboard
 
 Open the Discord Developer Portal: <https://discord.com/developers/applications>
@@ -239,32 +267,20 @@ OO_USER="admin@example.com"
 OO_PASS="changeme"
 
 # Linux: -w0 disables line wrapping
-BASE64_TOKEN=$(printf '%s' "${OO_USER}:${OO_PASS}" | base64 -w0)
-echo "OTLP_AUTH=Basic ${BASE64_TOKEN}"
+OTLP_AUTH="Basic $(printf '%s' "${OO_USER}:${OO_PASS}" | base64 -w0)"
 ```
 
-Then set these in each service `.env` (uncommenting optional lines where needed):
+Apply the token to all service `.env` files:
 
 ```bash
-OTLP_AUTH="Basic ${BASE64_TOKEN}"
-OTLP_ORGANIZATION=default
-```
-
-To apply the baked token to all service `.env` files in one go:
-
-```bash
-
 for f in black-mesa/.env api/.env mesastream/.env; do
   if grep -q '^OTLP_AUTH=' "$f"; then
     sed -i "s|^OTLP_AUTH=.*|OTLP_AUTH=\"${OTLP_AUTH}\"|" "$f"
   else
-    printf '\nOTLP_AUTH="%s"\n' "$OTLP_AUTH" >> "$f"
+    printf '\nOTLP_AUTH="%s"\nOTLP_ORGANIZATION=default\n' "$OTLP_AUTH" >> "$f"
   fi
 done
 ```
-
-If your `.env` files still contain the placeholder `OTLP_AUTH="Basic your_base64_encoded_auth_token"`,
-the command above will replace it automatically.
 
 See each repository's `README.md` for the complete variable reference.
 
@@ -301,38 +317,31 @@ from the running services (if you configured `OTLP_ENDPOINT`).
 
 ## 7. Dashboard setup (local OAuth flow)
 
-Copy the dashboard env example, then edit values:
+Copy the dashboard env example, then configure with sed:
 
 ```bash
 cp dashboard/.env.example dashboard/.env
-```
 
-Set these in `dashboard/.env`:
+# Use the same client ID from earlier
+sed -i "s|VITE_DISCORD_CLIENT_ID=.*|VITE_DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}|" dashboard/.env
+sed -i "s|VITE_API_BASE_URL=.*|VITE_API_BASE_URL=http://localhost:8080/api|" dashboard/.env
 
-```bash
-VITE_API_BASE_URL=http://localhost:8080/api
-VITE_DISCORD_CLIENT_ID=<your_discord_client_id>
-```
+# For root path deployment (default):
+sed -i "s|VITE_DISCORD_REDIRECT_URI=.*|VITE_DISCORD_REDIRECT_URI=http://localhost:4173/oauth/discord|" dashboard/.env
 
-For local dev at the root path (`/`), use:
-
-```bash
-VITE_DISCORD_REDIRECT_URI=http://localhost:4173/oauth/discord
-# leave VITE_BASE_PATH unset
-```
-
-If you intentionally run dashboard under `/dashboard/`, use:
-
-```bash
-VITE_DISCORD_REDIRECT_URI=http://localhost:4173/dashboard/oauth/discord
-VITE_BASE_PATH=/dashboard/
+# OR for /dashboard/ subpath deployment:
+# sed -i "s|VITE_DISCORD_REDIRECT_URI=.*|VITE_DISCORD_REDIRECT_URI=http://localhost:4173/dashboard/oauth/discord|" dashboard/.env
+# sed -i "s|VITE_BASE_PATH=.*|VITE_BASE_PATH=/dashboard/|" dashboard/.env
 ```
 
 Make sure your API env uses the same callback URL:
 
 ```bash
-# in api/.env
-DISCORD_REDIRECT_URI=http://localhost:4173/oauth/discord
+# Set redirect URI in api/.env (use the same path as dashboard)
+sed -i "s|DISCORD_REDIRECT_URI=.*|DISCORD_REDIRECT_URI=http://localhost:4173/oauth/discord|" api/.env
+
+# Or if using /dashboard/ subpath:
+# sed -i "s|DISCORD_REDIRECT_URI=.*|DISCORD_REDIRECT_URI=http://localhost:4173/dashboard/oauth/discord|" api/.env
 ```
 
 In Discord Developer Portal -> **OAuth2 -> Redirects**, add:
