@@ -106,8 +106,8 @@ occurrence of `changeme` with strong random values before running.
 services:
   black-mesa:
     build:
-      context: .
-      dockerfile: ./black-mesa/Dockerfile
+      context: ./black-mesa
+      dockerfile: Dockerfile
     container_name: black-mesa
     depends_on:
       - postgres
@@ -121,11 +121,11 @@ services:
 
   mesa-api:
     build:
-      context: .
-      dockerfile: ./api/Dockerfile
+      context: ./api
+      dockerfile: Dockerfile
     container_name: mesa-api
     ports:
-      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:8080:8080"  # Only bind to localhost
     depends_on:
       - postgres
       - redis
@@ -134,19 +134,20 @@ services:
 
   mesastream:
     build:
-      context: .
-      dockerfile: ./mesastream/Dockerfile
+      context: ./mesastream
+      dockerfile: Dockerfile
     container_name: mesastream
     depends_on:
       - redis
     ports:
-      - "127.0.0.1:8070:8070"
+      - "127.0.0.1:8070:8070"  # Only bind to localhost
     env_file:
       - mesastream/.env
     volumes:
       - ./lib:/app/lib:ro
       - ./mesastream/src:/app/mesastream/src:ro
       - ./data/mesastream:/var/cache/mesastream/audio
+
 
   postgres:
     image: postgres:17
