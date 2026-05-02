@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="row g-4">
-	{% if section.path is starting_with('/api') %}
+	{% if section.path is starting_with('/api') or section.path is starting_with('/technical/api') %}
 	<div class="col-12">
 		<section class="card bm-card">
 			<div class="card-body bm-prose">
